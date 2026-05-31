@@ -125,7 +125,7 @@ Vue.component('do-tracking', {
         nim: '',
         nama: '',
         ekspedisi: 'JNE Regular',
-        paketId: this.paketList.length > 0 ? this.paketList[0].id : '',
+        paketId: '',
         tanggalKirim: '',
         totalHarga: 0
       };
@@ -166,7 +166,7 @@ Vue.component('do-tracking', {
         ]
       };
       
-      this.data.push(newTrackingItem);
+      // Emit the created DO and let the parent update the shared tracking list.
       this.$emit('created', newTrackingItem);
       
       this.showAddForm = false;
