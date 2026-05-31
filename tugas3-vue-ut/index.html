@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SITTA • Pemesanan Bahan Ajar | Universitas Terbuka</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    /* Additional inline styles for templates if needed */
+    .badge { font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; }
+    .error { border-color: #dc2626 !important; box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1); }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header>
+      <div>
+        <h1>SITTA UT</h1>
+        <p style="color:#64748b; font-size:0.95rem; margin-top:-4px;">Sistem Informasi &amp; Transaksi Bahan Ajar • Universitas Terbuka</p>
+      </div>
+      
+      <nav>
+        <button 
+          :class="{ active: tab === 'stok' }" 
+          @click="tab = 'stok'">
+          📦 Stok Bahan Ajar
+        </button>
+        <button 
+          :class="{ active: tab === 'tracking' }" 
+          @click="tab = 'tracking'">
+          🚚 Tracking DO
+        </button>
+        <button 
+          :class="{ active: tab === 'order' }" 
+          @click="tab = 'order'">
+          🛒 Pemesanan
+        </button>
+      </nav>
+      
+      <div style="display:flex; align-items:center; gap:12px;">
+        <button @click="resetAllData" class="btn btn-sm btn-outline" style="padding:6px 12px; font-size:0.8rem;">🔄 Reset Data</button>
+      </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main>
+      <!-- STOK TAB -->
+      <section v-show="tab === 'stok'">
+        <div class="section-header">
+          <div>
+            <h2>📦 Manajemen Stok Bahan Ajar</h2>
+            <p style="color:#64748b; margin-top:4px;">Kelola inventori bahan ajar seluruh UT Daerah</p>
+          </div>
+          <div style="font-size:0.9rem; color:#64748b;">
+            Total: <strong style="color:#1e293b;">{{ stok.length }} item</strong> • 
+            Nilai: <strong style="color:#16a34a;">{{ formatRupiah(totalStockValue) }}</strong>
+          </div>
+        </div>
+        
+        <ba-stock-table 
+          :items="stok" 
+          :upbjj-list="upbjjList"
+          @created="handleStockCreated"
+          @updated="handleStockUpdated"
+          @deleted="handleStockDeleted">
+        </ba-stock-table>
+      </section>
+      
+      <!-- TRACKING TAB -->
+      <section v-show="tab === 'tracking'">
+        <div class="section-header">
+          <div>
+            <h2>🚚 Tracking Delivery Order (DO)</h2>
+            <p style="color:#64748b; margin-top:4px;">Pantau status pengiriman dan update progress secara real-time</p>
+          </div>
+          <div>
+            <span style="background:#dbeafe; color:#1e40af; padding:4px 12px; border-radius:9999px; font-weight:600;">
+              {{ filteredTrackingCount }} DO Aktif
+            </span>
+          </div>
+        </div>
+        
+        <do-tracking 
+          :data="tracking" 
+          :paket-list="paket"
+          :ekspedisi-list="ekspedisiList"
+          @created="handleNewDO"
+          @progress-updated="() => {}">
+        </do-tracking>
+      </section>
+      
+      <!-- ORDER / PEMESANAN TAB -->
+      <section v-show="tab === 'order'">
+        <order-form 
+          :paket="paket" 
+          :ekspedisi="ekspedisiList"
+          @created="handleNewDO">
+        </order-form>
+      </section>
+    </main>
+    
+    <!-- Global Modal (ref for all components) -->
+    <app-modal ref="modal"></app-modal>
+    
+    <!-- ==================== TEMPLATES ==================== -->
+    <!-- Templates are loaded by components via Vue.component registration -->
+    <!-- The actual template content is defined inside each .js component file -->
+    <!-- This structure follows the required project layout -->
+    
+  </div>
+  
+  <!-- Scripts - Order is important -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script src="js/services/api.js"></script>
+  <script src="js/components/status-badge.js"></script>
+  <script src="js/components/app-modal.js"></script>
+  <script src="js/components/stock-table.js"></script>
+  <script src="js/components/do-tracking.js"></script>
+  <script src="js/components/order-form.js"></script>
+  <script src="js/app.js"></script>
+  
+  <footer style="text-align:center; padding:24px; color:#94a3b8; font-size:0.85rem;">
+    Tugas Praktik 3 • STSI4209 • Universitas Terbuka • Implementasi Vue.js Component + Template<br>
+    Dibuat untuk kebutuhan proses pemesanan dan distribusi bahan ajar di UT
+  </footer>
+</body>
+</html>
