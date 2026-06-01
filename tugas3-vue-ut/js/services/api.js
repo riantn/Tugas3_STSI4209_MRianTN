@@ -4,7 +4,7 @@
 const ApiService = {
   async fetchData() {
     try {
-      const response = await fetch('/data/dataBahanAjar.json');
+      const response = await fetch('./data/dataBahanAjar.json');
       if (!response.ok) {
         throw new Error('Gagal memuat data');
       }
